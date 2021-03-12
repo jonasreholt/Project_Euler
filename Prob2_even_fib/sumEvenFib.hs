@@ -11,19 +11,24 @@ sumEvenFib max a b
 
 -- Mathematical versions
 
+-- evenN finds the largest even Fibonacci number's index
+-- that is smaller or equal to n.
+evenN :: Integer -> Integer
+evenN n =  (n - (n `mod` 3))
+
 -- the golden ratio
 phi = (1 + sqrt 5) / 2
 psi = 1 - phi
 
-fib' :: Double -> Integer
-fib' n = round ((phi ** n) / sqrt 5)
+fib' :: Integer -> Integer
+fib' n = round ((phi ** fromInteger n) / sqrt 5)
 
 -- Claim: sum fib' i, i=0 to n = fib' (n+2) - 1.
 -- Base case for n=0: fib ' 0 = 0 = 1 - 1
 -- Inductive step:
 --   fib' (n+3) - 1 = sum fib' i, i=0 to n+1
 --   which is what we want, hence it must be true for all n
-sumFib :: Double -> Integer
+sumFib :: Integer -> Integer
 sumFib n =
     fib' (n+2) - 1
 
@@ -31,10 +36,10 @@ sumFib n =
 -- preceding numbers. Hence we will have two uneven numbers (who's sum
 -- is the same as the next even number). This will go on forever, meaning
 -- the even sum is just sumFib n / 2, for all n giving a even fibonacci
--- number. Hence the below function only works if the n'th F number is even.
-sumEvenFib' :: Double -> Double
+-- number.
+sumEvenFib' :: Integer -> Double
 sumEvenFib' n =
-    (fromIntegral (sumFib n)) / 2
+    (fromIntegral (sumFib (evenN n))) / 2
 
 -- Finding the number n which is at most max
 fibN :: Double -> Integer
@@ -47,4 +52,4 @@ fibN max =
 -- even, I say n - ( n `mod` 3) or
 -- 3k <= n => 3 <= n/k => 3 = floor (n/k)
 n = fibN (4*10**6)
-answerToProb2 = sumEvenFib'' (fromIntegral (n - (n `mod` 3)))
+answerToProb2 = sumEvenFib' (fromIntegral (n - (n `mod` 3)))
