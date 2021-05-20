@@ -22,7 +22,7 @@ reverseInt n =
     revInt 0 n
     where
         revInt acc 0 = acc
-        revInt acc x = revInt (acc * 10 + (x `mod` 10)) (x `div` 10)
+        revInt acc rmd = revInt (acc * 10 + (rmd `mod` 10)) (rmd `div` 10)
 
 isPalindromic :: Int -> Bool
 isPalindromic n =
@@ -40,14 +40,7 @@ replicate9 n
 
 largestPalindromic :: Int -> Int
 largestPalindromic n =
-    let x = replicate9 n in
-       foldl1 max (lpf x x)
+    maximum [a * b | a <- [low .. high], b <- [low .. high], isPalindromic (a*b)]
     where
-        lpf x y
-            | x == lowb && y /= lowb      = lpf (y-1) (y-1)
-            | x == lowb && y == lowb      = []
-            | isPalindromic prod    = prod : lpf (x-1) y
-            | otherwise             = lpf (x-1) y
-            where
-                prod = x*y
-                lowb = 10 ^ (n-1)
+        low = 10^(n-1)
+        high = replicate9 n
